@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Market Donna - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================
+           PALETA DE COLORES PARA EL HOMEPAGE o pagina PRINCIPal
+           ========================================== */
+        :root {
+            --bg-marfil: #FDFBF7;
+            --text-pino: #1E4636;
+            --brand-naranja: #E87A33;
+            --brand-rojo: #D63434;
+        }
+
+        body { 
+            background-color: var(--bg-marfil); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: var(--text-pino);
+        }
+        
+        /* Clases de texto personalizadas */
+        .text-pino { color: var(--text-pino) !important; }
+        .text-naranja { color: var(--brand-naranja) !important; }
+        
+        /* Botones y fondos */
+        .bg-naranja { background-color: var(--brand-naranja); color: white; border: none; }
+        .bg-naranja:hover { background-color: var(--brand-rojo); color: white; }
+        
+        .bg-pino { background-color: var(--text-pino); color: white; border: none; }
+        .bg-pino:hover { background-color: #153326; color: white; }
+
+        .btn-outline-naranja {
+            color: var(--brand-naranja);
+            border-color: var(--brand-naranja);
+            background-color: transparent;
+        }
+        .btn-outline-naranja:hover {
+            color: var(--bg-marfil);
+            background-color: var(--brand-naranja);
+            border-color: var(--brand-naranja);
+        }
+
+        /* Buscador */
+        .search-bar-container .input-group-text, 
+        .search-bar-container .form-control {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Tarjetas de Producto */
+        .product-card { 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            border-radius: 12px;
+            border: 1px solid #eaeaea;
+            background-color: white;
+        }
+        .product-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(30, 70, 54, 0.08); /* Sombra con tono verde pino */
+        }
+        .product-img { 
+            height: 220px; 
+            object-fit: contain; 
+            padding: 1.5rem; 
+        }
+        
+        /* Botón de Favoritos flotante */
+        .btn-fav {
+            width: 35px;
+            height: 35px;
+            background-color: var(--text-pino);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .btn-fav:hover { background-color: var(--brand-naranja); color: white; }
+
+        /* ==========================================
+           ESTILOS DEL FOOTER Y BANNER PROMOCIONAL
+           ========================================== */
+        .promo-section { background-color: var(--brand-naranja); color: white; padding: 4rem 0; }
+        .top3-box { background-color: var(--text-pino); border-radius: 15px; padding: 2rem; text-align: center; }
+        .top3-item { background-color: white; color: var(--text-pino); border-radius: 10px; padding: 10px; font-weight: bold; font-size: 0.85rem;}
+        
+        .footer-section { background-color: var(--text-pino); color: white; padding: 3rem 0 1rem 0; font-size: 0.9rem;}
+        .footer-title { font-weight: bold; margin-bottom: 1.2rem; font-size: 1rem; letter-spacing: 0.5px;}
+        .footer-list { list-style: none; padding: 0; }
+        .footer-list li { margin-bottom: 0.5rem; color: #d1d8d5;}
+        .social-icon { font-size: 1.8rem; margin-right: 15px; transition: 0.3s; }
+        .social-icon.instagram { color: #E1306C; }
+        .social-icon.facebook { color: #1877F2; }
+        .social-icon:hover { opacity: 0.8; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg py-3 shadow-sm border-bottom sticky-top" style="background-color: var(--bg-marfil);">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/img/logo.png}" alt="Market Donna" style="max-height: 50px;">
+            </a>
+
+            <div class="mx-auto search-bar-container" style="width: 45%;">
+                <div class="input-group">
+                    <span class="input-group-text border-end-0 rounded-start-pill"><i class="fa-solid fa-magnifying-glass" style="color: var(--text-pino);"></i></span>
+                    <input type="text" class="form-control border-start-0 rounded-end-pill py-2" placeholder="Buscar producto...">
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <a th:href="@{/login}" class="btn bg-naranja fw-bold rounded-pill px-4 py-2 shadow-sm text-decoration-none">
+                    INICIAR SESIÓN
+                </a>
+                
+                <a href="#" class="btn rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: var(--text-pino);">
+                    <i class="fa-regular fa-star text-white"></i>
+                </a>
+                
+                <a th:href="@{/carrito}" class="text-naranja fs-4 position-relative text-decoration-none">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                        3
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1 text-pino">Ofertas</h3>
+            <p style="color: #667b71;">Solo por hoy, aprovecha.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            
+            <div class="col" th:each="p : ${productos}">
+                <div class="card h-100 product-card position-relative">
+                    
+                    <button class="btn-fav position-absolute top-0 end-0 m-3 shadow-sm">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                    
+                    <img th:src="@{'/img/productos/' + ${p.id} + '.png'}" class="card-img-top product-img" alt="Producto">
+                    
+                    <div class="card-body d-flex flex-column px-4 pb-4">
+                        <h5 class="card-title fw-bold text-pino mb-2" th:text="${p.nombre}">Nombre Producto</h5>
+                        
+                        <p class="card-text small mb-3 flex-grow-1" style="color: #667b71;" th:text="${p.descripcion}">
+                            Descripción breve del producto.
+                        </p>
+                        
+                        <div class="mb-3 d-flex align-items-center">
+                            <span th:if="${p.precioAnterior != null}" class="text-decoration-line-through small me-1" style="color: #9fb3a9;" th:text="'S/ ' + ${#numbers.formatDecimal(p.precioAnterior, 1, 2)}">S/ 0.00</span>
+                            <i th:if="${p.precioAnterior != null}" class="fa-solid fa-arrow-right-long mx-1" style="font-size: 0.8rem; color: #9fb3a9;"></i>
+                            <h4 class="fw-bold text-naranja mb-0 ms-1" th:text="'S/ ' + ${#numbers.formatDecimal(p.precio, 1, 2)}">S/ 0.00</h4>
+                        </div>
+                        
+                        <form th:action="@{/carrito/agregar/{id}(id=${p.id})}" method="post">
+                            <button type="submit" class="btn btn-outline-naranja w-100 fw-bold rounded-pill">
+                                Agregar
+                            </button>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <section class="promo-section mt-5">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                
+                <div class="col-md-5 mb-4 mb-md-0">
+                    <div class="top3-box shadow">
+                        <h2 class="fw-bold mb-1 text-white">TOP #3</h2>
+                        <p class="mb-4 text-white">De nuestros mejores productos</p>
+                        
+                        <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
+                            <div class="top3-item shadow-sm d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-egg text-naranja fs-4"></i> HUEVOS
+                            </div>
+                            <div class="top3-item shadow-sm d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-leaf text-success fs-4"></i> VERDURAS
+                            </div>
+                            <div class="top3-item shadow-sm d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-drumstick-bite text-naranja fs-4"></i> POLLO
+                            </div>
+                        </div>
+                        
+                        <p class="mb-0 text-white" style="font-size: 0.95rem;">
+                            Adquiere <strong class="text-naranja px-1 rounded bg-white">productos frescos</strong> a precios accesibles
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-5 offset-md-1">
+                    <h3 class="fw-bold mb-3 text-white">¡Los mejores precios los encontrarás en Market Donna!</h3>
+                    <p class="mb-4" style="line-height: 1.6; opacity: 0.9;">
+                        Estamos comprometidos en brindarte los precios más competitivos y la mejor calidad cerca de tu hogar. No te pierdas nuestras ofertas y promociones exclusivas. ¡Ven y descubre la diferencia en Market Donna!
+                    </p>
+                    <a href="#" class="btn bg-pino fw-bold rounded px-4 py-2 shadow-sm text-decoration-none">
+                        QUIERO VER
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title">SERVICIO AL CLIENTE</h5>
+                    <p class="mb-1 fw-bold" style="font-size: 0.85rem;">Horario de atención:</p>
+                    <p style="color: #d1d8d5; font-size: 0.85rem;">De lunes a domingo de 7 AM a 10 PM</p>
+                    <p class="mb-1 mt-3 fw-bold" style="font-size: 0.85rem;">Correo:</p>
+                    <p style="color: #d1d8d5; font-size: 0.85rem;">servicioalcliente@marketdonna.pe</p>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title">MÉTODOS DE PAGO</h5>
+                    <ul class="footer-list">
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Tarjetas de débito</li>
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Tarjetas de Crédito</li>
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Billeteras Digitales</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title">BENEFICIOS DE COMPRAR EN MARKET DONNA</h5>
+                    <ul class="footer-list">
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Precios Bajos</li>
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Calidad de Productos</li>
+                        <li><i class="fa-solid fa-circle text-white me-2" style="font-size: 0.4rem; vertical-align: middle;"></i>Delivery Gratis</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title">SÍGUENOS EN NUESTRAS REDES</h5>
+                    <div class="d-flex mt-3">
+                        <a href="#" class="text-decoration-none">
+                            <i class="fa-brands fa-instagram social-icon instagram bg-white rounded-circle"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <i class="fa-brands fa-facebook social-icon facebook bg-white rounded-circle"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+                <p class="small text-white-50 mb-0">&copy; 2026 Market Donna. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

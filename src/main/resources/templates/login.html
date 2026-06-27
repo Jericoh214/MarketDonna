@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Market Donna</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Panel izquierdo: Formulario */
+        .left-panel {
+            background-color: #d8d8d8; /* Color extraído de tu prototipo */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+
+        /* Logo de Market Donna */
+        .logo-container {
+            background-color: white;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+        
+        .logo-container img {
+            max-width: 250px;
+        }
+
+        /* Estilos de los inputs */
+        .form-label {
+            font-weight: bold;
+            color: #000;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Botón de Ingresar */
+        .btn-ingresar {
+            background-color: #f8f9fa;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 40px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-ingresar:hover {
+            background-color: #e2e6ea;
+            transform: translateY(-2px);
+        }
+
+        /* Enlaces */
+        .auth-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Panel derecho: Imagen Fotográfica */
+        .right-panel {
+            background: url('/img/fondos/login-bg.jpg') no-repeat center center;
+            background-size: cover;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            
+            <div class="col-md-5 col-lg-4 left-panel">
+                
+                <div class="logo-container shadow-sm">
+                    <img th:src="@{/img/logo.png}" alt="Market Donna Logo">
+                </div>
+
+                <form th:action="@{/login}" method="post">
+                    
+                    <label for="username" class="form-label">Usuario o Correo electronico:</label>
+                    <input type="email" class="form-control" id="username" name="username" required>
+                    
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    
+                    <div class="auth-links text-center mt-4">
+                        <a th:href="@{/recuperar-password}">¿se te olvido tu contraseña?</a>
+                        <a th:href="@{/registro}">¿no tienes una cuenta?</a>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-ingresar">INGRESAR</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-7 col-lg-8 right-panel d-none d-md-block">
+                </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

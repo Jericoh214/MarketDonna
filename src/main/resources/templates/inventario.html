@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario - Market Donna</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .text-brand { color: #f39c12; }
+        .bg-brand { background-color: #f39c12; color: white; }
+        .btn-warning-brand { background-color: #f39c12; color: white; border: none; }
+        .btn-warning-brand:hover { background-color: #e67e22; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-white border-bottom px-4 py-3 shadow-sm">
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="fa-solid fa-store text-brand me-2"></i>Market Donna
+        </a>
+    </nav>
+
+    <div class="container-fluid mt-4 px-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-0">Inventario</h2>
+                <p class="text-muted">Administra los productos de tu tienda.</p>
+            </div>
+            <a th:href="@{/inventario/nuevo}" class="btn btn-warning-brand fw-bold px-4 py-2 rounded-pill">
+                <i class="fa-solid fa-plus me-2"></i>Añadir Producto
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Descripción</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(productos)}">
+                            <td colspan="6" class="text-center py-4 text-muted">No hay productos registrados.</td>
+                        </tr>
+                        <tr th:each="p : ${productos}">
+                            <td class="ps-4 text-muted fw-bold" th:text="'#p' + ${p.id}"></td>
+                            <td>
+                                <div class="fw-bold" th:text="${p.nombre}"></div>
+                                <div class="small text-muted" th:text="${p.descripcion}"></div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border" th:text="${p.categoria != null ? p.categoria.nombre : 'Sin categoría'}"></span></td>
+                            <td th:classappend="${p.stock < 10} ? 'text-danger fw-bold' : 'fw-bold'" th:text="${p.stock}"></td>
+                            <td class="fw-bold" th:text="'S/ ' + ${#numbers.formatDecimal(p.precio, 1, 2)}"></td>
+                            <td class="text-center">
+                                <form th:action="@{/inventario/eliminar/{id}(id=${p.id})}" method="post" onsubmit="return confirm('¿Eliminar producto?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
