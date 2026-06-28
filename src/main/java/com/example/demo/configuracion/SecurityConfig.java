@@ -12,17 +12,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. Configuramos el encriptador de contraseñas (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. Configuramos las reglas de acceso (Rutas)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Desactivado temporalmente para no bloquear los botones del carrito
+            .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
                 // Rutas bloqueadas solo para Administradores
                 .requestMatchers("/admin/**", "/inventario/**").hasRole("ADMIN")

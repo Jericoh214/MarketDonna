@@ -20,7 +20,7 @@ public class Producto {
     private double precio; // El precio actual (o de oferta)
     
     @Column(name = "precio_anterior")
-    private Double precioAnterior; // El precio original (se mostrará tachado). Puede ser null.
+    private Double precioAnterior; // El precio original (se sequeda tachado). Puede ser nulo o no tener directamente.
     
     @Column(nullable = false)
     private int stock;
