@@ -77,14 +77,22 @@
             background-size: cover;
             min-height: 100vh;
         }
+        
+        .contenedor img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ajusta la imagen cubriendo todo el espacio */}
+
     </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <a th:href="@{/}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm" style="border-color: #e0e0e0; color: #1E4636;">
-            <i class="fa-solid fa-arrow-left me-2"></i> Volver a la tienda
-        </a>
-    </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm border-bottom sticky-top">
+        <div class="container-fluid px-4 d-flex justify-content-between">
+            <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/img/logo.png}" alt="Market Donna" style="max-height: 45px;">
+            </a>
+        </div>
+    </nav>
     
 
     <div class="container-fluid p-0">
@@ -94,15 +102,16 @@
                 
                 <div class="logo-container shadow-sm">
                     <img th:src="@{/img/logo.png}" alt="Market Donna Logo">
+                
                 </div>
 
                 <form th:action="@{/login}" method="post">
                     
-                    <label for="username" class="form-label">Usuario o Correo electronico:</label>
-                    <input type="email" class="form-control" id="username" name="username" required>
+                    <label for="username" class="form-label">Correo electronico:</label>
+                    <input type="email" name="username" class="form-control" required>
                     
                     <label for="password" class="form-label">Contraseña:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" name="password" class="form-control" required>
                     
                     <div class="auth-links text-center mt-4">
                         <a th:href="@{/recuperar-password}">¿se te olvido tu contraseña?</a>
@@ -110,7 +119,7 @@
                     </div>
                     
                     <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-ingresar">INGRESAR</button>
+                        <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm" style="border-color: #ff7300; color: #025c38;">INGRESAR</button>
                     </div>
 
                 </form>
@@ -124,4 +133,6 @@
     </div>
 
 </body>
+
+
 </html>

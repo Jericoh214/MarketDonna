@@ -19,15 +19,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // RADAR: Esto se imprimirá en tu consola cuando presiones "INGRESAR"
+        System.out.println("====== INTENTO DE LOGIN CON EL CORREO: " + email + " ======");
+
         Usuario usuario = usuarioRepository.findByEmail(email);
         
         if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario o password inválidos");
+            System.out.println("====== ERROR: USUARIO NO ENCONTRADO EN LA BD ======");
+            throw new UsernameNotFoundException("Usuario no encontrado");
         }
-
+        
+        System.out.println("====== ÉXITO: USUARIO ENCONTRADO, VERIFICANDO CONTRASEÑA... ======");
         return User.builder()
                 .username(usuario.getEmail())
-                .password(usuario.getPassword())
+                .password(usuario.getPassword()) 
                 .roles(usuario.getRol()) 
                 .build();
     }

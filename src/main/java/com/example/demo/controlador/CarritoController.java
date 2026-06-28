@@ -7,6 +7,8 @@ import com.example.demo.repositorio.ProductoRepository;
 import com.example.demo.repositorio.UsuarioRepository;
 import com.example.demo.servicio.CarritoService;
 import com.example.demo.servicio.PdfService;
+
+import jakarta.servlet.http.HttpSession; // Importación clave para mantener el PDF en memoria temporal
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,31 +62,26 @@ public class CarritoController {
         return "redirect:/"; 
     }
 
+    // 1. NUEVO FLUJO: PROCESAR COMPRA Y REDIRIGIR
     @PostMapping("/carrito/confirmar")
     @Transactional
-    public ResponseEntity<byte[]> confirmarPedido() {
+    public String confirmarPedido(HttpSession session) {
         try {
             if (carritoService.obtenerItems().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return "redirect:/carrito"; // Si está vacío, lo regresamos al carrito
             }
 
-            
             Usuario clienteTemporal = usuarioRepository.findById(2L).orElse(null);
 
-           
             Pedido pedidoNuevo = new Pedido();
             pedidoNuevo.setUsuario(clienteTemporal);
             pedidoNuevo.setFechaPedido(LocalDateTime.now());
             pedidoNuevo.setEstado(EstadoPedido.PENDIENTE);
             pedidoNuevo.setTotal(BigDecimal.valueOf(carritoService.calcularTotal()));
             
-            
             pedidoRepository.save(pedidoNuevo);
 
-          
             for (ItemCarrito item : carritoService.obtenerItems()) {
-                
-               
                 DetallePedido detalle = new DetallePedido();
                 detalle.setPedido(pedidoNuevo);
                 detalle.setProducto(item.getProducto());
@@ -93,31 +90,66 @@ public class CarritoController {
                 detalle.setSubtotal(item.getSubtotal());
                 detallePedidoRepository.save(detalle);
 
-               
                 Producto productoComprado = item.getProducto();
                 int nuevoStock = productoComprado.getStock() - item.getCantidad();
                 productoComprado.setStock(nuevoStock);
                 productoRepository.save(productoComprado);
             }
 
+            // Generamos el PDF ANTES de limpiar el carrito y lo guardamos en la sesión temporal
             ByteArrayOutputStream pdfStream = pdfService.generarBoletaPdf(
                     carritoService.obtenerItems(), 
                     carritoService.calcularTotal()
             );
+            
+            session.setAttribute("ultimoPdfGenerado", pdfStream.toByteArray());
+            session.setAttribute("ultimoPedidoId", pedidoNuevo.getId());
 
+            // Limpiamos el carrito
             carritoService.limpiarCarrito();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Boleta_MarketDonna_ORD-" + pedidoNuevo.getId() + ".pdf");
-            
-            return new ResponseEntity<>(pdfStream.toByteArray(), headers, HttpStatus.OK);
+            // Redirigimos a la nueva vista de éxito
+            return "redirect:/pedido/exito";
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return "redirect:/carrito?error=true";
         }
     }
+
+    // 2. NUEVA RUTA: MOSTRAR LA PANTALLA DE ÉXITO
+    @GetMapping("/pedido/exito")
+    public String mostrarPantallaExito(HttpSession session, Model model) {
+        Long pedidoId = (Long) session.getAttribute("ultimoPedidoId");
+        
+        // Le pasamos el ID del pedido a la vista HTML para que lo muestre dinámicamente
+        if (pedidoId != null) {
+            model.addAttribute("numeroPedido", "MD-00" + pedidoId);
+        } else {
+            model.addAttribute("numeroPedido", "MD-00000");
+        }
+        
+        return "exito_compra";
+    }
+
+    // 3. NUEVA RUTA: DESCARGAR EL PDF GUARDADO
+    @GetMapping("/comprobante")
+    public ResponseEntity<byte[]> descargarComprobante(HttpSession session) {
+        byte[] pdfBoleta = (byte[]) session.getAttribute("ultimoPdfGenerado");
+        Long pedidoId = (Long) session.getAttribute("ultimoPedidoId");
+
+        // Si por alguna razón no hay PDF en memoria (ej. el usuario entró directo a la URL), damos error 404
+        if (pdfBoleta == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Boleta_MarketDonna_ORD-" + pedidoId + ".pdf");
+        
+        return new ResponseEntity<>(pdfBoleta, headers, HttpStatus.OK);
+    }
+
     @GetMapping("/carrito/sumar/{id}")
     public String sumarItem(@PathVariable Long id) {
         Producto producto = productoRepository.findById(id).orElse(null);
